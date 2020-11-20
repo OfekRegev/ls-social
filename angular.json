@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "ls-social"
+  "defaultProject": "ls-social",
+  "cli": {
+    "analytics": "34c7aeaa-37ab-4fb9-805d-7cf43cc14613"
+  }
 }
