@@ -4,6 +4,8 @@ import { Injectable } from "@angular/core";
 @Injectable({
   providedIn: 'root',
 })
-exports class Globals {
-  base_url: string = "localhost:3000/api"
+export class Globals {
+  base_url: string = "http://localhost:3000/";
+  register_endpoint: string = "register";
+  login_endpoint: string = "login";
 }

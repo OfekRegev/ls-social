@@ -1,7 +1,9 @@
 <body>
-  <h1>Sign Up</h1>
+  <h1>Sign In</h1>
   <div>
-    <button ng-clcik= "onSignInClicked()" type="button" name="sign_in">Sign In</button>
-    <button ng-clcik= "onSignUpClicked()" type="button" name="sign_up">Sign Up</button>
+    <input type="email" id="user_email" placeholder="Email Address" [(ngModel)] = loginDetails.email>
+    <input type="password" id="user_password" placeholder="Password" [(ngModel)] = loginDetails.password>
+    <button (click)= "onSignUpClicked()" type="button" name="sign_in">Sign In</button>
+    <a routerLink = "/sign-in">Already registered? sign in now!</a>
   </div>
 </body>
