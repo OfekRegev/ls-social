@@ -15,6 +15,7 @@ const init = async () => {
     port: 3000,
     host: 'localhost'
   });
+  await server.register(require('hapi-cors'))
   await server.register([
     UserModule,
   ])

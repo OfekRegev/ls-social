@@ -1,9 +1,10 @@
 <body>
   <h1>Sign In</h1>
   <div>
-    <input type="email" id="user_email" placeholder="Email Address" [(ngModel)] = loginDetails.email>
-    <input type="password" id="user_password" placeholder="Password" [(ngModel)] = loginDetails.password>
-    <button (click)= "onSignUpClicked()" type="button" name="sign_in">Sign In</button>
-    <a routerLink = "/sign-in">Already registered? sign in now!</a>
+      <input type="text" id="user_name" placeholder="Name" [(ngModel)]=signUpModel.name>
+      <input type="email" id="user_email" placeholder="Email Address" [(ngModel)]=signUpModel.email>
+      <input type="password" id="user_password" placeholder="Password" [(ngModel)]=signUpModel.password>
+      <button (click)="onSignUpClicked()" type="button" name="sign_up">Sign Up</button>
+      <a routerLink="/sign-in">Already registered? sign in now!</a>
   </div>
 </body>

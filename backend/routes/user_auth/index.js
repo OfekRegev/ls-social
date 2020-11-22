@@ -1,11 +1,12 @@
 const UserModel = require('../../db_models/user_model');
+const AuthModel = require('../../db_models/auth_model')
 module.exports.plugin = {
   pkg: require('./package.json'),
   register: function(server, options, next) {
     // creating a route for sign-up request
     server.route([{
         method: "POST",
-        path: "/sing_up",
+        path: "/register",
         handler: async function(request, reply) {
           // first we need to validate the user is not already registered by checking whether the email is already in our database
           let existing_user = await UserModel.findOne({
@@ -29,13 +30,13 @@ module.exports.plugin = {
               })
               await user.save();
               let auth_model = new AuthModel({
-                user_id : user.user_id
+                user_id: user.user_id
               })
-              console.log("user added");
+              await auth_model.save()
               // successfuly saved the user details in the db. the user is now signed up
               const response = reply.response({
                 message: "Successfuly signed up!",
-                auth_token : auth_model.auth_token
+                auth_token: auth_model.auth_token
               });
               response.code(200);
               return response;
@@ -57,20 +58,61 @@ module.exports.plugin = {
       {
         method: "POST",
         path: "/login",
+
         handler: async function(request, reply) {
+          let authHeader = request.headers["authorization"]
+          // first checking for existing login token
+          if (authHeader && authHeader.includes("Bearer")) {
+            // extracting the token out of the header value
+            let authToken = authHeader.split(' ')[1]
+            // searching in the db for the session auth token
+            let dbToken = await AuthModel.findOne({
+              auth_token: authToken
+            })
+            console.log("authToken = " + authToken + " dbToken = " + dbToken);
+            if (dbToken) {
+              // if the token exits the user is automatically logged in
+              const response = reply.response({
+                message: "Welcome to LSocial"
+              })
+
+              response.code(200)
+              // response.redirect("/feed")
+              return response;
+            }
+          }
           console.log(request.payload);
+          console.log(request.payload.email);
           let user = await UserModel.findOne({
             "email": request.payload.email,
-            "password" : request.payload.password
+            "password": request.payload.password
           })
           if (user) {
-            // this user is in the system and the password is valid
-            const response = reply.response({
-              message: "Welcome to LSocial"
-            })
-            response.code(200)
-            response.redirect("/feed")
-            return response;
+            try {
+              // this user is in the system and the password is valid
+              // creating a new token in the sessions
+              let auth_model = new AuthModel({
+                user_id: user.user_id
+              })
+              await AuthModel.deleteOne({
+                user_id: user.user_id
+              })
+              await auth_model.save()
+              const response = reply.response({
+                message: "Welcome to LSocial",
+                auth_token: auth_model.auth_token
+              })
+              response.code(200)
+              // response.redirect("/feed")
+              return response;
+            } catch (e) {
+              console.error(e);
+              const response = reply.response({
+                message: "Login failed. something went wrong."
+              });
+              response.code(400);
+              return response
+            }
           } else {
             // this user is not in the system
             const response = reply.response({
