@@ -2,8 +2,8 @@ import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Globals } from "../common/globals";
-import {TokenInterceptor } from "../services/auth/token.interceptor"
+import { Globals } from "../../common/globals";
+import {TokenInterceptor } from "../../services/auth/token.interceptor"
 export interface AuthResultDTO {
   message: string,
   auth_token: string
@@ -14,8 +14,6 @@ export interface AuthResultDTO {
   providedIn: 'root',
 })
 export class AuthenticationService {
-  private loginEndpoint = "/login"
-  private signUpEndpoint = "/register"
   constructor(private http: HttpClient, private globals: Globals,private tokenInterceptor:TokenInterceptor) {
   }
 

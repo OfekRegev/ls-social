@@ -1,5 +1,6 @@
 const UserModel = require('../../db_models/user_model');
-const AuthModel = require('../../db_models/auth_model')
+const AuthModel = require('../../db_models/auth_model');
+const Helper = require('../../helper')
 module.exports.plugin = {
   pkg: require('./package.json'),
   register: function(server, options, next) {
@@ -9,7 +10,7 @@ module.exports.plugin = {
         path: "/register",
         handler: async function(request, reply) {
           // first we need to validate the user is not already registered by checking whether the email is already in our database
-          let existing_user = await UserModel.findOne({
+          let existing_user = await UserModel.User.findOne({
             "email": request.payload.email
           });
           if (existing_user) {
@@ -61,29 +62,23 @@ module.exports.plugin = {
 
         handler: async function(request, reply) {
           let authHeader = request.headers["authorization"]
-          // first checking for existing login token
-          if (authHeader && authHeader.includes("Bearer")) {
-            // extracting the token out of the header value
-            let authToken = authHeader.split(' ')[1]
-            // searching in the db for the session auth token
-            let dbToken = await AuthModel.findOne({
-              auth_token: authToken
+          let authToken = Helper.extractTokenFromHeader(authHeader)
+          // searching in the db for the session auth token
+          let dbToken = await AuthModel.findOne({
+            auth_token: authToken
+          })
+          if (dbToken) {
+            // if the token is valid the user is automatically logged in
+            const response = reply.response({
+              message: "Welcome to LSocial"
             })
-            console.log("authToken = " + authToken + " dbToken = " + dbToken);
-            if (dbToken) {
-              // if the token exits the user is automatically logged in
-              const response = reply.response({
-                message: "Welcome to LSocial"
-              })
-
-              response.code(200)
-              // response.redirect("/feed")
-              return response;
-            }
+            response.code(200)
+            // response.redirect("/feed")
+            return response;
           }
           console.log(request.payload);
           console.log(request.payload.email);
-          let user = await UserModel.findOne({
+          let user = await UserModel.User.findOne({
             "email": request.payload.email,
             "password": request.payload.password
           })

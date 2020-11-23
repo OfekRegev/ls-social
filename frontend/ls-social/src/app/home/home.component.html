@@ -1,0 +1,36 @@
+<body ng-app="app" ng-controller="appCtrl">
+  <div class="main_container">
+    <div class="new_post_container">
+      <mat-form-field appearance="fill" class="new_post_form">
+        <mat-label>Write new post</mat-label>
+        <input matInput placeholder="What's on your mind?" class="new_post_input" ([ngModel]) = "newPost.content">
+      </mat-form-field>
+      <!-- <ngp-image-picker [_config]="imagePickerConf" ></ngp-image-picker> -->
+      <button mat-raised-button (click) = "publishPost()">Post</button>
+    </div>
+    <div class="list_container">
+      <mat-list role="list" class="posts_list">
+        <mat-list-item *ngFor="let post of posts">
+          <div class="post_container">
+            <mat-card class="post_card">
+              <mat-card-header>
+                <mat-card-title>{{post.author}}</mat-card-title>
+                <div>
+                  <mat-card-subtitle>created: {{post.creationDate}}</mat-card-subtitle>
+                </div>
+                <div>
+                  <mat-card-subtitle ng-show="post.lastEdited">editted: {{post.lastEdited}}</mat-card-subtitle>
+                </div>
+                <!-- <button ng-show="post.editable" mat-icon-button color="primary" (click)="onEditPost(post)">
+                  <mat-icon>edit</mat-icon>
+                </button> -->
+              </mat-card-header>
+              <mat-card-content class = "post_content">{{post.content}}</mat-card-content>
+            </mat-card>
+          </div>
+        </mat-list-item>
+      </mat-list>
+
+    </div>
+  </div>
+</body>

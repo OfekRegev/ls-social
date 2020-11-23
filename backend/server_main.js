@@ -6,6 +6,7 @@ const Mongoose = require('mongoose');
 const UserModel = require('./db_models/user_model');
 const HapiCoockie = require('@hapi/cookie');
 const UserModule = require('./routes/user_auth');
+const PostModel = require('./routes/posts')
 const ls_social_db = Mongoose.connect('mongodb://localhost/ls_social_db', {
   useNewUrlParser: true
 });
@@ -18,6 +19,7 @@ const init = async () => {
   await server.register(require('hapi-cors'))
   await server.register([
     UserModule,
+    PostModel
   ])
   await server.start();
   console.log("onServerStarted")

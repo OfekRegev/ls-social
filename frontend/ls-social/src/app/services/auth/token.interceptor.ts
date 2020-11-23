@@ -5,7 +5,7 @@ import { Injectable } from "@angular/core";
   providedIn: 'root',
 })
 export class TokenInterceptor {
-  private token: string = "";
+  token: string = "ALK3J_0Rk";
 
   updateToken(token: string): void {
     this.token = token;

@@ -8,4 +8,7 @@ export class Globals {
   base_url: string = "http://localhost:3000/";
   register_endpoint: string = "register";
   login_endpoint: string = "login";
+  publish_post_endpoint: string = "publish";
+  get_post_endpoint: string = "posts";
+
 }
