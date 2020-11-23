@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AuthenticationService } from "../services/auth/authentication";
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
@@ -9,7 +9,7 @@ import { AuthenticationService } from "../services/auth/authentication";
 })
 export class SignUpComponent implements OnInit {
   @Input() signUpModel: SignUpModel
-  constructor(private authSerivce: AuthenticationService) {
+  constructor(private authSerivce: AuthenticationService, private router: Router) {
     this.signUpModel = {
       email: "",
       name: "",
@@ -22,9 +22,11 @@ export class SignUpComponent implements OnInit {
 
   onSignUpClicked() : void {
     this.authSerivce.userSignUp(this.signUpModel.email,this.signUpModel.name,this.signUpModel.password).subscribe(
-      response => {console.log(response);
+      response => {
+        this.router.navigate(['/home'])
       },
-      err => {},
+      err => {console.log(err);
+      },
       () => {}
     )
   }

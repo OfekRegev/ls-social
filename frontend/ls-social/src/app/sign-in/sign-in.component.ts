@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserLogin } from "./models/user.login.model";
 import { AuthenticationService } from "../services/auth/authentication";
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
@@ -8,7 +10,7 @@ import { AuthenticationService } from "../services/auth/authentication";
 })
 export class SignInComponent implements OnInit {
   @Input() loginDetails: UserLogin
-  constructor(private authSerivce: AuthenticationService) {
+  constructor(private authSerivce: AuthenticationService, private router: Router) {
     this.loginDetails = {
       email: "",
       password: ""
@@ -20,9 +22,14 @@ export class SignInComponent implements OnInit {
 
   onSignInClicked() {
     console.log("sign in clicked");
-
+    // empty email or password cannot sign in anyway
+    if (this.loginDetails.email === "" || this.loginDetails.password === "") {
+      return
+    }
     this.authSerivce.userSignIn(this.loginDetails.email, this.loginDetails.password).subscribe(
-      res => console.log('HTTP response', res),
+      res =>
+        this.router.navigate(['/home'])
+      ,
       err => console.log('HTTP Error', err),
       () => console.log('HTTP request completed.'))
   }

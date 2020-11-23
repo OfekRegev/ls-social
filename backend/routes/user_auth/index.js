@@ -24,7 +24,7 @@ module.exports.plugin = {
             // validating the user saved to the db successfuly
             try {
               // saving the user to the database
-              let user = new UserModel({
+              let user = new UserModel.User({
                 email: request.payload.email,
                 name: request.payload.name,
                 password: request.payload.password,
