@@ -13,8 +13,8 @@ const ls_social_db = Mongoose.connect('mongodb+srv://ofek_regev:Dontry12@cluster
 //Init server
 const init = async () => {
   const server = new Hapi.Server({
-    port: 10000,
-    host: 'lsocialbackend'
+    port: 3000,
+    host: "0.0.0.0"
   });
   await server.register(require('hapi-cors'))
   await server.register([
