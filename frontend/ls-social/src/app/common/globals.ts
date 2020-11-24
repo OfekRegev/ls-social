@@ -5,7 +5,7 @@ import { Injectable } from "@angular/core";
   providedIn: 'root',
 })
 export class Globals {
-  base_url: string = "http://localhost:3000/";
+  base_url: string = "https://losocial-backend.onrender.com/";
   register_endpoint: string = "register";
   login_endpoint: string = "login";
   publish_post_endpoint: string = "publish";

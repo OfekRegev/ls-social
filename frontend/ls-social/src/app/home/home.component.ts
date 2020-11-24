@@ -6,6 +6,12 @@ import { Post } from '../models/post.model'
 import { PostService } from "../services/posts/posts.service";
 import { DatePipe } from '@angular/common';
 const datePipe = new DatePipe('en-US');
+
+
+export interface NewPost {
+  content: string;
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -13,11 +19,14 @@ const datePipe = new DatePipe('en-US');
 })
 export class HomeComponent implements OnInit {
 
-  @Input() newPost: NewPost = {
-    content: "",
-  }
+  @Input() newPost: NewPost
+
   posts: Post[] = [];
-  constructor(private postService: PostService) { }
+  constructor(private postService: PostService) {
+    this.newPost = {
+      content: ""
+    }
+  }
 
   ngOnInit(): void {
     this.postService.getPosts(0, 0)
@@ -26,7 +35,7 @@ export class HomeComponent implements OnInit {
           // maping DTO object to display object
           posts.forEach(element => {
             let lastEdited: string = datePipe.transform(element.lastEditTimeStamp, 'EEEE, MMMM d') as string
-            let creationDate:string = datePipe.transform(element.creationTimeStamp, 'EEEE, MMMM d') as string
+            let creationDate: string = datePipe.transform(element.creationTimeStamp, 'EEEE, MMMM d') as string
             let post: Post = {
               content: element.content,
               author: element.author.name,
@@ -50,32 +59,30 @@ export class HomeComponent implements OnInit {
   }
 
   publishPost() {
-    this.postService.publishPost(this.newPost.content)
-    .pipe(map(
-      (post)=>{
-        let lastEdited: string = datePipe.transform(post.lastEditTimeStamp, 'EEEE, MMMM d') as string
-        let creationDate:string = datePipe.transform(post.creationTimeStamp, 'EEEE, MMMM d') as string
-        return {
-          content: post.content,
-          author: post.author.name,
-          creationDate: creationDate,
-          lastEdited: lastEdited,
-          imageUrl: "",
-          editable: false,
-        }
-      }
-    )).subscribe(
-      (post)=>{
-        this.posts.push(post)
-      },
-      (error)=>{
-        console.error(error);
-      },
-      ()=>{}
-    )
-  }
-}
+    console.log(this.newPost.content);
 
-export interface NewPost {
-  content: string;
+    this.postService.publishPost(this.newPost.content)
+      .pipe(map(
+        (post) => {
+          let lastEdited: string = datePipe.transform(post.lastEditTimeStamp, 'EEEE, MMMM d') as string
+          let creationDate: string = datePipe.transform(post.creationTimeStamp, 'EEEE, MMMM d') as string
+          return {
+            content: post.content,
+            author: post.author.name,
+            creationDate: creationDate,
+            lastEdited: lastEdited,
+            imageUrl: "",
+            editable: false,
+          }
+        }
+      )).subscribe(
+        (post) => {
+          this.posts.push(post)
+        },
+        (error) => {
+          console.error(error);
+        },
+        () => { }
+      )
+  }
 }

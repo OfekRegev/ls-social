@@ -3,7 +3,7 @@
     <div class="new_post_container">
       <mat-form-field appearance="fill" class="new_post_form">
         <mat-label>Write new post</mat-label>
-        <input matInput placeholder="What's on your mind?" class="new_post_input" ([ngModel]) = "newPost.content">
+        <input matInput placeholder="What's on your mind?" class="new_post_input" [(ngModel)] = "newPost.content">
       </mat-form-field>
       <!-- <ngp-image-picker [_config]="imagePickerConf" ></ngp-image-picker> -->
       <button mat-raised-button (click) = "publishPost()">Post</button>
